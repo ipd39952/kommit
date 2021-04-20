@@ -1,1 +1,1 @@
-# kommit
+# kommit.rb
