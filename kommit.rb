@@ -21,8 +21,8 @@ def initial_info
   @user_wants_kanye = ask_about_ye.downcase.match?(/yes|ye|yup|yep|y/)
   # @kanye_quotes = load_kanye_quotes if @user_wants_kanye
   @average_commits_per_day = ask_for('What should be the average amount of commits per day? 🤔').to_i
-  @chance_to_commit_on_saturday = ask_for('What should be the chance of commiting on Saturdays🌴? (percentage)').to_i
-  @chance_to_commit_on_sunday = ask_for('What should be the chance of commiting on Sundays⛱️? (percentage)').to_i
+  @chance_to_commit_on_saturday = ask_for('What should be the chance of commiting on Saturdays🌴 ? (percentage)').to_i
+  @chance_to_commit_on_sunday = ask_for('What should be the chance of commiting on Sundays⛱️ ? (percentage)').to_i
 end
 
 def git_repo?
@@ -31,18 +31,18 @@ end
 
 def init_repo
   unless git_repo?
-    system('cd && gh repo create kommitr_commits --private --confirm')
+    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && gh repo create kommitr_commits --private --confirm")
   end
 end
 
 def create_commit(days_ago)
   if @user_wants_kanye
     commit_message = KANYE_QUOTES.sample
-    system("cd && cd kommitr_commits && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
+    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
     puts "Last commit message: #{commit_message}"
     @commits_done += 1
   else
-    system("cd && cd kommitr_commits && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
+    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
     print "#{@commits_done} commits made\r"
     @commits_done += 1
     $stdout.flush
@@ -77,7 +77,7 @@ def user_confirmation
   user_answer = ask_for("Would you like to push the #{@commits_done} commits?")
   push_confirmation = user_answer.downcase.match?(/yes|ye|yup|yep|y/)
   if push_confirmation
-    system('cd && cd kommitr_commits && git push origin master')
+    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && cd kommitr_commits && git push origin master")
     sleep 3
     puts 'All done! 😎'
   else
