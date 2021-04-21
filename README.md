@@ -1,5 +1,5 @@
 <h3 align="center">
-  <img src="images/logo.png" alt="fastlane Logo" width="150" align="center">
+  <img src="assets/logo.png" alt="fastlane Logo" width="150" align="center">
 </h3>
 
 <h1 align="center">kommit.rb</h1>
