@@ -26,7 +26,7 @@ def git_repo?()
 end
 
 def init_repo
-  if not git_repo?
+  unless git_repo?
     system('cd && gh repo create kommitr_commits --private --confirm')
   end
 end
