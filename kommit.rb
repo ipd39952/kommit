@@ -11,6 +11,7 @@ require_relative 'util_west'
 @commits_done = 0
 @chance_to_commit_on_saturday = nil
 @chance_to_commit_on_sunday = nil
+@windows_machine = RUBY_PLATFORM.match?(/mswin|mingw/)
 
 def initial_info
   file = File.open('assets/ascii.txt')
@@ -31,18 +32,18 @@ end
 
 def init_repo
   unless git_repo?
-    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && gh repo create kommitr_commits --private --confirm")
+    system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && gh repo create kommitr_commits --private --confirm")
   end
 end
 
 def create_commit(days_ago)
   if @user_wants_kanye
     commit_message = KANYE_QUOTES.sample
-    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
+    system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
     puts "Last commit message: #{commit_message}"
     @commits_done += 1
   else
-    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
+    system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
     print "#{@commits_done} commits made\r"
     @commits_done += 1
     $stdout.flush
@@ -77,7 +78,7 @@ def user_confirmation
   user_answer = ask_for("Would you like to push the #{@commits_done} commits?")
   push_confirmation = user_answer.downcase.match?(/yes|ye|yup|yep|y/)
   if push_confirmation
-    system("cd #{RUBY_PLATFORM =~ /mswin|mingw/ ? '%HOMEPATH%' : ''} && cd kommitr_commits && git push origin master")
+    system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && cd kommitr_commits && git push origin master")
     sleep 3
     puts 'All done! 😎'
   else
