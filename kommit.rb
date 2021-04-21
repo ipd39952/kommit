@@ -22,7 +22,7 @@ def initial_info
 end
 
 def git_repo?
-  File.directory?("#{Dir.home}/kommitr_commits")
+  File.directory?("#{Dir.home}/kommitr_commits/.git")
 end
 
 def init_repo
