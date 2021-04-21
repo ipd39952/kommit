@@ -21,8 +21,8 @@ def initial_info
   @chance_to_commit_on_sunday = ask_for('What should be the chance of commiting on Sundays? (percentage)').to_i
 end
 
-def git_repo?()
-  File.directory?('.git')
+def git_repo?
+  File.directory?("#{Dir.home}/kommitr_commits")
 end
 
 def init_repo
