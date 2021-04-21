@@ -21,10 +21,14 @@ def initial_info
   @chance_to_commit_on_sunday = ask_for('What should be the chance of commiting on Sundays? (percentage)').to_i
 end
 
+def git_repo?
+  File.directory?("#{Dir.home}/kommitr_commits")
+end
+
 def init_repo
-  # create a private gihub repo in home directory with the name kommitr_commits
-  # TODO handle already existing repo
-  system('cd && gh repo create kommitr_commits --private --confirm')
+  unless git_repo?
+    system('cd && gh repo create kommitr_commits --private --confirm')
+  end
 end
 
 def create_commit(days_ago)
