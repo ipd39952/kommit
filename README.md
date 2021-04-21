@@ -4,7 +4,7 @@
 
 <h1 align="center">kommit.rb</h1>
 
-<h4 align="center">I believe these little green squares with different shades on people's GitHub profiles should be interpreted as what they are - colorful squares. They don't respresent anything in a legitimate form since they can easily spoofed. That's why I created <ins>kommit.rb</ins></h4>
+<h4 align="center">I believe these little green squares with different shades on people's GitHub profiles should be interpreted as what they are - colorful squares. They don't respresent anything in a legitimate form since they can be easily spoofed. That's why I created <ins>kommit.rb</ins></h4>
 <hr>
 
 ## Requirements 
