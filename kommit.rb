@@ -21,8 +21,8 @@ def initial_info
   @user_wants_kanye = ask_about_ye.downcase.match?(/yes|ye|yup|yep|y/)
   # @kanye_quotes = load_kanye_quotes if @user_wants_kanye
   @average_commits_per_day = ask_for('What should be the average amount of commits per day? 🤔').to_i
-  @chance_to_commit_on_saturday = ask_for('What should be the chance of commiting on Saturdays🌴? (percentage)').to_i
-  @chance_to_commit_on_sunday = ask_for('What should be the chance of commiting on Sundays⛱️? (percentage)').to_i
+  @chance_to_commit_on_saturday = ask_for('What should be the chance of commiting on Saturdays? 🌴 (percentage)').to_i
+  @chance_to_commit_on_sunday = ask_for('What should be the chance of commiting on Sundays? ⛱️ (percentage)').to_i
 end
 
 def git_repo?
