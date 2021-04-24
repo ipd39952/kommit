@@ -95,8 +95,3 @@ def user_confirmation
     puts 'All these commits for nothing! 😭'
   end
 end
-
-github_cli_check
-initial_info
-yeezus_commit_it!
-user_confirmation
