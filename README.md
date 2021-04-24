@@ -30,4 +30,4 @@ As `kommit.rb` uses a private repository reverting all commits is as simple as d
 ## Usage
 
 1. Navigate inside the project folder
-2. Run `ruby kommit`
+2. Run `ruby start_kommit`
