@@ -14,6 +14,7 @@ require_relative 'util_west'
 @chance_to_commit_on_sunday = nil
 @windows_machine = RUBY_PLATFORM.match?(/mswin|mingw/)
 GH_USERNAME = ENV['GH_USERNAME']
+KOMMIT_DIR="kommitr_commits"
 
 def initial_info
   file = File.open('assets/ascii.txt')
@@ -39,26 +40,26 @@ else
 end
 
 def init_repo
-  if directory_exists?("kommitr_commits")
+  if directory_exists?(KOMMIT_DIR)
     cleanup
   end
 
-  system("gh repo create kommitr_commits --private --confirm")
+  system("gh repo create #{KOMMIT_DIR} --private --confirm")
 end
 
 def create_commit(days_ago)
-  unless directory_exists?("kommitr_commits")
-    system("gh repo clone #{GH_USERNAME}/kommitr_commits")
-    system("cd kommitr_commits && git reset --hard $(git rev-list --max-parents=0 HEAD)")
+  unless directory_exists?(KOMMIT_DIR)
+    system("gh repo clone #{GH_USERNAME}/#{KOMMIT_DIR}")
+    system("cd #{KOMMIT_DIR} && git reset --hard $(git rev-list --max-parents=0 HEAD)")
   end
 
   if @user_wants_kanye
     commit_message = KANYE_QUOTES.sample
-    system("cd kommitr_commits && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
+    system("cd #{KOMMIT_DIR} && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
     puts "Last commit message: #{commit_message}"
     @commits_done += 1
   else
-    system("cd kommitr_commits && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
+    system("cd #{KOMMIT_DIR} && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
     print "#{@commits_done} commits made\r"
     @commits_done += 1
     $stdout.flush
@@ -70,8 +71,8 @@ def directory_exists?(directory)
 end
 
 def cleanup
-  if directory_exists?("kommitr_commits")
-    FileUtils.rm_r("kommitr_commits")
+  if directory_exists?(KOMMIT_DIR)
+    FileUtils.rm_r(KOMMIT_DIR)
   end
 end
 
@@ -103,7 +104,7 @@ def user_confirmation
   user_answer = ask_for("Would you like to push the #{@commits_done} commits?")
   push_confirmation = user_answer.downcase.match?(/yes|ye|yup|yep|y/)
   if push_confirmation
-    system("cd kommitr_commits && git push origin --force")
+    system("cd #{KOMMIT_DIR} && git push origin --force")
     sleep 3
     puts 'All done! 😎'
   else
