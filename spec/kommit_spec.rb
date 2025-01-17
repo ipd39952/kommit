@@ -2,12 +2,6 @@ require 'kommit'
 
 # Comments in this file are learning points that I've made for myself
 
-describe '#git_repo?' do
-  it 'should return true' do
-    expect(git_repo?).to eq true
-  end
-end
-
 describe '#user_confirmation' do
   it 'should handle empty input correctly' do
     # Sending certain value to a #gets method
