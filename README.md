@@ -28,6 +28,16 @@ As `kommit.rb` uses a private repository reverting all commits is as simple as d
 <hr>
 
 ## Usage
+### Setup
+Make sure to set the environment variable `GH_USERNAME` with your appropriate github username.
+Simply copy the existing `.envrc.example` file like:
 
+```sh
+cp .envrc.example .envrc
+```
+
+and fill in your username 🪄.
+
+### Run Kommit
 1. Navigate inside the project folder
-2. Run `ruby start_kommit`
+2. Run `ruby start_kommit.rb`

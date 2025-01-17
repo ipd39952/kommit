@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'date'
+require 'fileutils'
 require_relative 'kanye'
 require_relative 'util_west'
 
@@ -12,6 +13,8 @@ require_relative 'util_west'
 @chance_to_commit_on_saturday = nil
 @chance_to_commit_on_sunday = nil
 @windows_machine = RUBY_PLATFORM.match?(/mswin|mingw/)
+GH_USERNAME = `gh api user --jq '.login'`.strip
+KOMMIT_DIR="kommitr_commits"
 
 def initial_info
   file = File.open('assets/ascii.txt')
@@ -26,10 +29,6 @@ def initial_info
   @chance_to_commit_on_sunday = ask_for('What should be the chance of commiting on Sundays? ⛱️  (percentage)').to_i
 end
 
-def git_repo?
-  File.directory?("#{Dir.home}/kommitr_commits/.git")
-end
-
 def github_cli_check
   `gh --version`
 rescue Errno::ENOENT
@@ -41,22 +40,39 @@ else
 end
 
 def init_repo
-  return if git_repo?
+  if directory_exists?(KOMMIT_DIR)
+    cleanup
+  end
 
-  system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && gh repo create kommitr_commits --private --confirm")
+  system("gh repo create #{KOMMIT_DIR} --private --confirm")
 end
 
 def create_commit(days_ago)
+  unless directory_exists?(KOMMIT_DIR)
+    system("gh repo clone #{GH_USERNAME}/#{KOMMIT_DIR}")
+    system("cd #{KOMMIT_DIR} && git reset --hard $(git rev-list --max-parents=0 HEAD)")
+  end
+
   if @user_wants_kanye
     commit_message = KANYE_QUOTES.sample
-    system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
+    system("cd #{KOMMIT_DIR} && git commit --allow-empty --date=\"#{days_ago} day ago\" -m \"#{commit_message}\" --quiet")
     puts "Last commit message: #{commit_message}"
     @commits_done += 1
   else
-    system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && cd kommitr_commits && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
+    system("cd #{KOMMIT_DIR} && git commit --allow-empty --allow-empty-message --date=\"#{days_ago} day ago\"  -m \"\" --quiet")
     print "#{@commits_done} commits made\r"
     @commits_done += 1
     $stdout.flush
+  end
+end
+
+def directory_exists?(directory)
+  File.directory?(directory)
+end
+
+def cleanup
+  if directory_exists?(KOMMIT_DIR)
+    FileUtils.rm_r(KOMMIT_DIR)
   end
 end
 
@@ -88,7 +104,7 @@ def user_confirmation
   user_answer = ask_for("Would you like to push the #{@commits_done} commits?")
   push_confirmation = user_answer.downcase.match?(/yes|ye|yup|yep|y/)
   if push_confirmation
-    system("cd #{@windows_machine ? '%HOMEPATH%' : ''} && cd kommitr_commits && git push origin master")
+    system("cd #{KOMMIT_DIR} && git push origin --force")
     sleep 3
     puts 'All done! 😎'
   else
