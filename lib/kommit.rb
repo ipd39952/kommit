@@ -13,7 +13,7 @@ require_relative 'util_west'
 @chance_to_commit_on_saturday = nil
 @chance_to_commit_on_sunday = nil
 @windows_machine = RUBY_PLATFORM.match?(/mswin|mingw/)
-GH_USERNAME = ENV['GH_USERNAME']
+GH_USERNAME = `gh api user --jq '.login'`.strip
 KOMMIT_DIR="kommitr_commits"
 
 def initial_info
